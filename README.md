@@ -1,138 +1,87 @@
-# Remotion Prompt to Motion Graphics
+# Synthwave Sunset Animation
 
-<p align="center">
-  <a href="https://github.com/remotion-dev/logo">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-dark.apng">
-      <img alt="Animated Remotion Logo" src="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-light.gif">
-    </picture>
-  </a>
-</p>
+![Preview](assets/preview.png)
 
-AI-powered motion graphics generator that transforms natural language prompts into Remotion code.
+An animated 80s synthwave-style video background built with [Remotion](https://remotion.dev). Features a retro gas station scene with animated sky, descending striped sun, drifting clouds, and twinkling stars.
 
-## Architecture
+## Features
+
+- **Synthwave Sun** - Classic striped/banded sun that descends to the horizon
+- **Animated Sky** - Gradient transitions from warm sunset oranges to cool night purples
+- **Wispy Clouds** - Stretched, atmospheric clouds drifting across the sky
+- **Star Field** - 120 stars with individual twinkle animations, faint during day, bright at night
+- **Color Grading** - Multi-layer filter system for cohesive synthwave aesthetic
+- **Gas Station Foreground** - PNG overlay with transparent sky area
+
+## Specs
+
+| Property | Value |
+|----------|-------|
+| Duration | 3:43 (223 seconds) |
+| Frames | 6690 @ 30fps |
+| Resolution | 1920x1080 |
+| Sunset | 2:20 (frame 4200) |
+
+## Project Structure
 
 ```
-User Prompt → Validation → Skill Detection → Code Generation → Sanitization → Live Preview
+src/remotion/
+├── SynthwaveBackground.tsx   # Main composition with all animated layers
+├── Root.tsx                  # Composition registration
+├── DynamicComp.tsx           # Dynamic code compilation (unused for this project)
+└── compiler.ts               # Babel compiler utilities
+
+public/
+└── gas-station.png           # Foreground image with transparent sky
+
+assets/
+├── gas-station.png           # Source image
+└── preview.png               # README preview image
 ```
 
-## How It Works
+## Quick Start
 
-### 1. Validation
+```bash
+# Install dependencies
+npm install
 
-Before expensive model calls, a lightweight classifier determines if the prompt describes valid motion graphics content.
+# Open Remotion Studio to preview
+npm run remotion
 
-**Accepted**: animated text, data visualizations, UI animations, social media content, abstract motion graphics
-
-**Rejected**: questions, conversational requests, non-visual tasks
-
-### 2. Skill Detection
-
-The system analyzes the prompt to identify which **skills** are relevant. Skills are modular knowledge units that provide domain-specific guidance to the code generation model.
-
-There are two types of skills:
-
-- **Guidance Skills** - Pattern libraries with best practices for specific domains (charts, typography, transitions, etc.)
-- **Example Skills** - Complete working code references that demonstrate specific animation patterns
-
-This approach keeps the base prompt lightweight while dynamically injecting only the relevant expertise for each request.
-
-### 3. Code Generation
-
-Uses a one-shot prompt with the base Remotion knowledge plus any detected skills. The generated code follows these principles:
-
-- **Constants-first design** - All text, colors, and timing values are declared as editable constants at the top
-- **Aesthetic defaults** - Guidance on visual polish, spacing, and animation feel
-- **Crossfade patterns** - Smooth state transitions without layout jumps
-- **Spring physics** - Natural, organic motion using Remotion's spring() function
-
-### 4. Sanitization & Compilation
-
-The response is cleaned (removing markdown wrappers and trailing commentary), then compiled in-browser using Babel. The compiled component renders directly in the Remotion Preview with all necessary APIs injected.
-
-## Skills System
-
-Skills enable contextual expertise without bloating every prompt. Located in `src/skills/`:
-
-### Guidance Skills
-
-| Skill              | Purpose                                                                                 |
-| ------------------ | --------------------------------------------------------------------------------------- |
-| **charts**         | Data visualization patterns - bar charts, pie charts, axis labels, staggered animations |
-| **typography**     | Kinetic text - typewriter effects, word carousels, text highlights                      |
-| **messaging**      | Chat UI - bubble layouts, WhatsApp/iMessage styling, staggered entrances                |
-| **transitions**    | Scene changes - TransitionSeries, fade/slide/wipe effects                               |
-| **sequencing**     | Timing control - Sequence, Series, staggered delays                                     |
-| **spring-physics** | Organic motion - spring configs, bounce effects, chained animations                     |
-| **social-media**   | Platform-specific formats - aspect ratios, safe zones                                   |
-| **3d**             | Three.js integration - 3D scenes, camera setup                                          |
-
-### Example Skills (Code Snippets)
-
-Example skills provide complete working references (histogram, chat messages, typewriter effects, etc.) that demonstrate these patterns in action. We think of them like implementation archetypes that can be used and adjusted for the user prompt.
-
-## Usage Tips
-
-**Prompting best practices:**
-
-- Be specific about colors, timing, and layout ("green sent bubbles on the right, gray received on the left")
-- Include data directly in the prompt for charts and visualizations
-- Describe the animation feel you want ("bouncy spring entrance", "smooth fade", "staggered timing")
-
-**Images:**
-
-- Direct image uploads are not supported
-- Reference images via URL - the generated code will use Remotion's `<Img>` component
-- Example: _"Create a DVD screensaver animation of this image https://example.com/logo.png"_
-
-**What works well:**
-
-- Kinetic typography and text animations
-- Data visualizations with animated entrances
-- Chat/messaging UI mockups
-- Social media content (Stories, Reels, TikTok)
-- Logo animations and brand intros
-- Abstract motion graphics
-
-## Commands
-
-**Install Dependencies**
-
-```console
-npm i
+# Render final video
+npm run render -- --composition=SynthwaveBackground
 ```
 
-**Start Preview**
+## Timeline
 
-```console
-npm run dev
+| Phase | Time | Frames | Description |
+|-------|------|--------|-------------|
+| Sunset | 0:00 - 2:20 | 0 - 4200 | Sun descends, warm orange/pink sky |
+| Night | 2:20 - 3:43 | 4200 - 6690 | Stars brighten, cool purple/blue tones |
+
+## Customization
+
+Key constants in `SynthwaveBackground.tsx`:
+
+```typescript
+const DURATION_FRAMES = 6690;  // Total length
+const SUNSET_FRAME = 4200;     // When sun hits horizon
+const STAR_COUNT = 120;        // Number of stars
+const CLOUD_COUNT = 8;         // Number of cloud wisps
 ```
 
-**Render video**
+### Color Palette
 
-```console
-npx remotion render
-```
+The synthwave aesthetic uses these color ranges:
 
-**Upgrade Remotion**
+- **Sky Sunset**: `#1A1A2E` (top) → `#4A1A5E` (mid) → `#FF6B35` (horizon)
+- **Sky Night**: `#0D0D1A` (top) → `#1A1A3E` (mid) → `#2D1B4E` (horizon)
+- **Sun**: Pastel yellow/pink gradient with `#1A1A2E` stripes
 
-```console
-npx remotion upgrade
-```
+## Output
 
-## Docs
-
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://discord.gg/6VzzNDwUwV).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/remotion-dev/remotion/issues/new).
+Rendered videos are saved to `out/SynthwaveBackground.mp4`
 
 ## License
 
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
+Note that for some entities a Remotion company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
